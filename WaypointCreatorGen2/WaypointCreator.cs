@@ -429,7 +429,7 @@ namespace WaypointCreatorGen2
 
             // creature_addon
             SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @CGUID;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `path_id`, `SheathState`) VALUES\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `PathId`, `SheathState`) VALUES\r\n");
             SQLOutputTextBox.AppendText("(@CGUID, @PATH, 1);\r\n");
             SQLOutputTextBox.AppendText("\r\n");
             SQLOutputTextBox.AppendText("\r\n");
