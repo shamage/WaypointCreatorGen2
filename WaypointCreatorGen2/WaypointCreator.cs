@@ -425,7 +425,7 @@ namespace WaypointCreatorGen2
 
             // creature
             if (firstRow != null)
-                SQLOutputTextBox.AppendText($"UPDATE `creature` SET `PositionX`= {firstRow.Cells[1].Value}, `PositionY`= {firstRow.Cells[2].Value}, `PositionZ`= {firstRow.Cells[3].Value}, `Orientation`= {firstRow.Cells[4].Value}, `MovementType`= 2 WHERE `guid`= @CGUID;\r\n");
+                SQLOutputTextBox.AppendText($"UPDATE `creature` SET `position_x`= {firstRow.Cells[1].Value}, `position_y`= {firstRow.Cells[2].Value}, `position_z`= {firstRow.Cells[3].Value}, `orientation`= {firstRow.Cells[4].Value}, `MovementType`= 2 WHERE `guid`= @CGUID;\r\n");
 
             // creature_addon
             SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @CGUID;\r\n");
