@@ -383,8 +383,8 @@ namespace WaypointCreatorGen2
         {
             // Generates the SQL output.
             // waypoint_path_node
-            SQLOutputTextBox.AppendText("SET @CGUID := xxxxxx;\r\n");
-            SQLOutputTextBox.AppendText("SET @PATH := @CGUID * 10;\r\n");
+            SQLOutputTextBox.AppendText("SET @ACGUID := xxxxxx;\r\n");
+            SQLOutputTextBox.AppendText("SET @PATH := @ACGUID * 100;\r\n");
             SQLOutputTextBox.AppendText("DELETE FROM `waypoint_path_node` WHERE `PathId`= @PATH;\r\n");
             SQLOutputTextBox.AppendText("INSERT INTO `waypoint_path_node` (`PathId`, `NodeId`, `PositionX`, `PositionY`, `PositionZ`, `Orientation`, `Delay`) VALUES\r\n");
 
@@ -404,9 +404,9 @@ namespace WaypointCreatorGen2
 
             SQLOutputTextBox.AppendText("\r\n");
 
-            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_addon` WHERE `PathID`= @PATH;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_addon` (`PathID`, `PointID`, `SplinePointIndex`, `PositionX`, `PositionY`, `PositionZ`) VALUES\r\n");
-
+            // SQLOutputTextBox.AppendText("DELETE FROM `waypoint_addon` WHERE `PathID`= @PATH;\r\n");
+            // SQLOutputTextBox.AppendText("INSERT INTO `waypoint_addon` (`PathID`, `PointID`, `SplinePointIndex`, `PositionX`, `PositionY`, `PositionZ`) VALUES\r\n");
+            /*
             int splineRowCount = 0;
             DataGridViewRow splineFirstRow = null;
             foreach (DataGridViewRow row in SplineGridView.Rows)
@@ -420,17 +420,24 @@ namespace WaypointCreatorGen2
                 else
                     SQLOutputTextBox.AppendText($"(@PATH, {row.Cells[0].Value}, {row.Cells[1].Value}, {row.Cells[2].Value}, {row.Cells[3].Value}, {row.Cells[4].Value});\r\n");
             }
-
+            
             SQLOutputTextBox.AppendText("\r\n");
+            */
 
             // creature
-            if (firstRow != null)
-                SQLOutputTextBox.AppendText($"UPDATE `creature` SET `position_x`= {firstRow.Cells[1].Value}, `position_y`= {firstRow.Cells[2].Value}, `position_z`= {firstRow.Cells[3].Value}, `orientation`= {firstRow.Cells[4].Value}, `MovementType`= 2 WHERE `guid`= @CGUID;\r\n");
+            // if (firstRow != null) - - `position_x`= {firstRow.Cells[1].Value}, `position_y`= {firstRow.Cells[2].Value}, `position_z`= {firstRow.Cells[3].Value}, `orientation`= {firstRow.Cells[4].Value}, 
+            SQLOutputTextBox.AppendText($"UPDATE `creature` SET `MovementType`= 2 WHERE `guid`= @ACGUID;\r\n");
+            SQLOutputTextBox.AppendText("\r\n");
 
             // creature_addon
-            SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @CGUID;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `PathId`, `SheathState`) VALUES\r\n");
-            SQLOutputTextBox.AppendText("(@CGUID, @PATH, 1);\r\n");
+            SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @ACGUID;\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `PathId`, `mount`, `StandState`, `SheathState`, `emote`, `visibilityDistanceType`, `auras`) VALUES\r\n");
+            SQLOutputTextBox.AppendText("(@ACGUID, @PATH, 0, 0, 1, 0, 0, '');\r\n");
+            SQLOutputTextBox.AppendText("\r\n");
+
+            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_path` WHERE `PathId`=@PATH;\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_path` (`PathId`, `MoveType`, `Flags`, `Comment`) VALUES\r\n");
+            SQLOutputTextBox.AppendText("(@PATH, 0, 0, 'xxxx - xxxx');\r\n");
             SQLOutputTextBox.AppendText("\r\n");
             SQLOutputTextBox.AppendText("\r\n");
 
