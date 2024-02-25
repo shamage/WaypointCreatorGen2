@@ -429,6 +429,9 @@ namespace WaypointCreatorGen2
             SQLOutputTextBox.AppendText($"UPDATE `creature` SET `MovementType`= 2 WHERE `guid`= @ACGUID;\r\n");
             SQLOutputTextBox.AppendText("\r\n");
 
+            SQLOutputTextBox.AppendText($"UPDATE `creature_template` SET `AIName` = 'SmartAI', `ScriptName` = '' WHERE `entry` = xxxxx;\r\n");
+            SQLOutputTextBox.AppendText("\r\n");
+
             // creature_addon
             SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @ACGUID;\r\n");
             SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `PathId`, `mount`, `StandState`, `SheathState`, `emote`, `visibilityDistanceType`, `auras`) VALUES\r\n");
