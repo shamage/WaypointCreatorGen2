@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System;
 
 namespace WaypointCreatorGen2
 {
@@ -13,7 +13,6 @@ namespace WaypointCreatorGen2
         Dictionary<UInt32, Dictionary<UInt64, List<WaypointInfo>>> WaypointDatabyCreatureEntry = new Dictionary<UInt32, Dictionary<UInt64, List<WaypointInfo>>>();
 
         DataGridViewRow[] CopiedDataGridRows;
-
 
         public WaypointCreator()
         {
@@ -44,7 +43,7 @@ namespace WaypointCreatorGen2
                 GridViewContextMenuStrip.Enabled = false;
                 EditorLoadingLabel.Text = "Loading [" + Path.GetFileName(dialog.FileName) + "]...";
 
-                WaypointDatabyCreatureEntry = await Task.Run(()=> GetWaypointDataFromSniff(dialog.FileName));
+                WaypointDatabyCreatureEntry = await Task.Run(() => GetWaypointDataFromSniff(dialog.FileName));
 
                 EditorImportSniffButton.Enabled = true;
                 EditorFilterEntryButton.Enabled = true;
@@ -69,8 +68,9 @@ namespace WaypointCreatorGen2
                         UInt32 creatureId = 0;
                         UInt64 lowGuid = 0;
 
-                        // Extracting the packet timestamp in milliseconds from the packet header for delay calculations
-                        string[] packetHeader = line.Split(new char[] { ' ' });
+                        // Extracting the packet timestamp in milliseconds from the packet header for Delay calculations
+                        string[] packetHeader = line.Split(' ');
+
                         for (int i = 0; i < packetHeader.Length; ++i)
                         {
                             if (packetHeader[i].Contains("Time:"))
@@ -90,7 +90,7 @@ namespace WaypointCreatorGen2
                             // Extracting entry and lowGuid from packet
                             if (line.Contains("MoverGUID:"))
                             {
-                                string[] words = line.Split(new char[] { ' ' });
+                                string[] words = line.Split(' ');
                                 for (int i = 0; i < words.Length; ++i)
                                 {
                                     if (words[i].Contains("Entry:"))
@@ -107,7 +107,7 @@ namespace WaypointCreatorGen2
                             // Extracting spline duration
                             if (line.Contains("MoveTime:"))
                             {
-                                string[] words = line.Split(new char[] { ' ' });
+                                string[] words = line.Split(' ');
                                 for (int i = 0; i < words.Length; ++i)
                                     if (words[i].Contains("MoveTime:"))
                                         wpInfo.MoveTime = UInt32.Parse(words[i + 1]);
@@ -116,7 +116,7 @@ namespace WaypointCreatorGen2
                             // Extract Facing Angles
                             if (line.Contains("FaceDirection:"))
                             {
-                                string[] words = line.Split(new char[] { ' ' });
+                                string[] words = line.Split(' ');
                                 for (int i = 0; i < words.Length; ++i)
                                     if (words[i].Contains("FaceDirection:"))
                                         wpInfo.Position.Orientation = float.Parse(words[i + 1], CultureInfo.InvariantCulture);
@@ -125,7 +125,7 @@ namespace WaypointCreatorGen2
                             // Extracting waypoint (The space in the string is intentional. Do not remove!)
                             if (line.Contains(" Points:"))
                             {
-                                string[] words = line.Split(new char[] { ' ' });
+                                string[] words = line.Split(' ');
                                 for (int i = 0; i < words.Length; ++i)
                                 {
                                     if (words[i].Contains("X:"))
@@ -160,7 +160,7 @@ namespace WaypointCreatorGen2
 
                             if (line.Contains(" WayPoints:"))
                             {
-                                string[] words = line.Split(new char[] { ' ' });
+                                string[] words = line.Split(' ');
                                 SplinePosition splinePosition = new SplinePosition();
                                 for (int i = 0; i < words.Length; ++i)
                                 {
@@ -189,6 +189,7 @@ namespace WaypointCreatorGen2
 
             if (creatureId == 0)
             {
+
                 foreach (var waypointsByEntry in WaypointDatabyCreatureEntry)
                     foreach (var waypointsByGuid in waypointsByEntry.Value)
                         EditorListBox.Items.Add(waypointsByEntry.Key.ToString() + " (" + waypointsByGuid.Key.ToString() + ")");
@@ -216,16 +217,16 @@ namespace WaypointCreatorGen2
                 foreach (WaypointInfo wpInfo in WaypointDatabyCreatureEntry[creatureId][lowGUID])
                 {
                     int splineCount = 0;
-                    string orientation = "NULL";
-                    if (wpInfo.Position.Orientation.HasValue)
-                        orientation = wpInfo.Position.Orientation.Value.ToString(CultureInfo.InvariantCulture);
+                    string Orientation = "NULL";
+                    if (wpInfo.Position.Orientation != 0f)
+                        Orientation = wpInfo.Position.Orientation.ToString(CultureInfo.InvariantCulture);
 
                     EditorGridView.Rows.Add(
                         count,
                         wpInfo.Position.PositionX.ToString(CultureInfo.InvariantCulture),
                         wpInfo.Position.PositionY.ToString(CultureInfo.InvariantCulture),
                         wpInfo.Position.PositionZ.ToString(CultureInfo.InvariantCulture),
-                        orientation,
+                        Orientation,
                         wpInfo.MoveTime,
                         wpInfo.Delay);
 
@@ -248,6 +249,7 @@ namespace WaypointCreatorGen2
             BuildGraphPath();
             GridViewContextMenuStrip.Enabled = true;
         }
+
         private void BuildGraphPath()
         {
             EditorWaypointChart.ChartAreas[0].AxisX.ScaleView.ZoomReset();
@@ -334,7 +336,7 @@ namespace WaypointCreatorGen2
             if (CopiedDataGridRows == null || CopiedDataGridRows.Length == 0 || EditorGridView.SelectedRows.Count == 0)
                 return;
 
-            int index = aboveSelection ? EditorGridView.SelectedRows[0].Index: EditorGridView.SelectedRows[EditorGridView.SelectedRows.Count - 1].Index + 1;
+            int index = aboveSelection ? EditorGridView.SelectedRows[0].Index : EditorGridView.SelectedRows[EditorGridView.SelectedRows.Count - 1].Index + 1;
 
             DataGridViewRow[] rowsCopy = new DataGridViewRow[EditorGridView.Rows.Count];
             EditorGridView.Rows.CopyTo(rowsCopy, 0);
@@ -382,12 +384,12 @@ namespace WaypointCreatorGen2
         private void GenerateSQLStripMenuItem_Click(object sender, EventArgs e)
         {
             // Generates the SQL output.
-            // waypoint_data
-            SQLOutputTextBox.AppendText("SET @CGUID := xxxxxx;\r\n");
-            SQLOutputTextBox.AppendText("SET @PATH := @CGUID * 10;\r\n");
-            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_data` WHERE `id`= @PATH;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `delay`) VALUES\r\n");
-            
+            // waypoint_path_node
+            SQLOutputTextBox.AppendText("SET @ACGUID := xxxxxx;\r\n");
+            SQLOutputTextBox.AppendText("SET @PATH := @ACGUID * 10;\r\n");
+            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_path_node` WHERE `PathId`= @PATH;\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_path_node` (`PathId`, `NodeId`, `PositionX`, `PositionY`, `PositionZ`, `Orientation`, `Delay`) VALUES\r\n");
+
             int rowCount = 0;
             DataGridViewRow firstRow = null;
             foreach (DataGridViewRow row in EditorGridView.Rows)
@@ -404,8 +406,8 @@ namespace WaypointCreatorGen2
 
             SQLOutputTextBox.AppendText("\r\n");
 
-            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_data_addon` WHERE `PathID`= @PATH;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_data_addon` (`PathID`, `PointID`, `SplinePointIndex`, `PositionX`, `PositionY`, `PositionZ`) VALUES\r\n");
+            // SQLOutputTextBox.AppendText("DELETE FROM `waypoint_addon` WHERE `PathID`= @PATH;\r\n");
+            // SQLOutputTextBox.AppendText("INSERT INTO `waypoint_addon` (`PathID`, `PointID`, `SplinePointIndex`, `PositionX`, `PositionY`, `PositionZ`) VALUES\r\n");
 
             int splineRowCount = 0;
             DataGridViewRow splineFirstRow = null;
@@ -425,13 +427,32 @@ namespace WaypointCreatorGen2
 
             // creature
             if (firstRow != null)
-                SQLOutputTextBox.AppendText($"UPDATE `creature` SET `position_x`= {firstRow.Cells[1].Value}, `position_y`= {firstRow.Cells[2].Value}, `position_z`= {firstRow.Cells[3].Value}, `orientation`= {firstRow.Cells[4].Value}, `spawndist`= 0, `MovementType`= 2 WHERE `guid`= @CGUID;\r\n");
+            {
+                SQLOutputTextBox.AppendText($"UPDATE `creature` SET `position_x`= {firstRow.Cells[1].Value}, `position_y`= {firstRow.Cells[2].Value}, `position_z`= {firstRow.Cells[3].Value}, `orientation`= {firstRow.Cells[4].Value} WHERE `guid`= @ACGUID;\r\n");
+            }
+
+            SQLOutputTextBox.AppendText($"UPDATE `creature` SET `MovementType`= 2 WHERE `guid`= @ACGUID;\r\n");
+            SQLOutputTextBox.AppendText("\r\n");
+
+            SQLOutputTextBox.AppendText($"UPDATE `creature_template` SET `AIName` = 'SmartAI', `ScriptName` = '' WHERE `entry` = xxxxx;\r\n");
+            SQLOutputTextBox.AppendText("\r\n");
 
             // creature_addon
-            SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @CGUID;\r\n");
-            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `waypointPathId`, `bytes2`) VALUES\r\n");
-            SQLOutputTextBox.AppendText("(@CGUID, @PATH, 1);\r\n");
+            SQLOutputTextBox.AppendText("DELETE FROM `creature_addon` WHERE `guid`= @ACGUID;\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `creature_addon` (`guid`, `PathId`, `mount`, `StandState`, `SheathState`, `emote`, `visibilityDistanceType`, `auras`) VALUES\r\n");
+            SQLOutputTextBox.AppendText("(@ACGUID, @PATH, 0, 0, 1, 0, 0, '');\r\n");
             SQLOutputTextBox.AppendText("\r\n");
+
+            SQLOutputTextBox.AppendText("DELETE FROM `waypoint_path` WHERE `PathId`=@PATH;\r\n");
+            SQLOutputTextBox.AppendText("INSERT INTO `waypoint_path` (`PathId`, `MoveType`, `Flags`, `Velocity`, `Comment`) VALUES\r\n");
+            string orientationStr = "NULL";
+            if (EditorGridView.Rows.Count > 0)
+            {
+                var wpInfo = EditorGridView.Rows[0].DataBoundItem as WaypointInfo;
+                if (wpInfo != null && wpInfo.Position.Orientation != 0f)
+                    orientationStr = wpInfo.Position.Orientation.ToString(CultureInfo.InvariantCulture);
+            }
+            SQLOutputTextBox.AppendText("(@PATH, 0, 0, null, 'xxxx - xxxx');\r\n");
             SQLOutputTextBox.AppendText("\r\n");
 
             TabControl.SelectedTab = TabControl.TabPages[1];
@@ -453,8 +474,9 @@ namespace WaypointCreatorGen2
 
     public class WaypointInfo
     {
+        public WaypointPosition Position { get; set; } = new WaypointPosition();
+
         public UInt32 TimeStamp = 0;
-        public WaypointPosition Position = new WaypointPosition();
         public UInt32 MoveTime = 0;
         public Int32 Delay = 0;
         public List<SplinePosition> SplineList = new List<SplinePosition>();
@@ -465,7 +487,7 @@ namespace WaypointCreatorGen2
         public float PositionX = 0f;
         public float PositionY = 0f;
         public float PositionZ = 0f;
-        public float? Orientation;
+        public float Orientation = 0f;
     }
 
     public class SplinePosition
