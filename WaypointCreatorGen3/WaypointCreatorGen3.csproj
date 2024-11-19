@@ -8,11 +8,8 @@
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>WaypointCreatorGen3</RootNamespace>
 		<AssemblyName>WaypointCreatorGen3</AssemblyName>
-    <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-
-      <PropertyGroup>
+		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
         <RootNamespace>WaypointCreatorGen3</RootNamespace>
