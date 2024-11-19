@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System;
 
-namespace WaypointCreatorGen2
+namespace WaypointCreatorGen3
 {
     public partial class WaypointCreator : Form
     {

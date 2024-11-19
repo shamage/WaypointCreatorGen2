@@ -8,7 +8,20 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>WaypointCreatorGen2</RootNamespace>
     <AssemblyName>WaypointCreatorGen2</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+      <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <PackageReference Include="System.Windows.Forms.DataVisualization" Version="5.0.0" />
+      </ItemGroup>
+
+    </Project>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>

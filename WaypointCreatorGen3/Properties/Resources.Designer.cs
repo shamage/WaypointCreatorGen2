@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WaypointCreatorGen2.Properties {
+namespace WaypointCreatorGen3.Properties {
     using System;
     
     

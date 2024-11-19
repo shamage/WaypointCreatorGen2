@@ -1,5 +1,5 @@
 ﻿
-namespace WaypointCreatorGen2
+namespace WaypointCreatorGen3
 {
     partial class WaypointCreator
     {
