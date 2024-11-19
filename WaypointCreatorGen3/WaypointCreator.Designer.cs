@@ -4,14 +4,14 @@ namespace WaypointCreatorGen3
     partial class WaypointCreator
     {
         /// <summary>
-        /// Erforderliche Designervariable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Verwendete Ressourcen bereinigen.
+        /// Clean up used resources.
         /// </summary>
-        /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
+        /// <param name="disposing">True if managed resources should be deleted; False otherwise.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))

@@ -406,25 +406,6 @@ namespace WaypointCreatorGen3
 
             SQLOutputTextBox.AppendText("\r\n");
 
-            // SQLOutputTextBox.AppendText("DELETE FROM `waypoint_addon` WHERE `PathID`= @PATH;\r\n");
-            // SQLOutputTextBox.AppendText("INSERT INTO `waypoint_addon` (`PathID`, `PointID`, `SplinePointIndex`, `PositionX`, `PositionY`, `PositionZ`) VALUES\r\n");
-
-            int splineRowCount = 0;
-            DataGridViewRow splineFirstRow = null;
-            foreach (DataGridViewRow row in SplineGridView.Rows)
-            {
-                if (splineRowCount == 0)
-                    splineFirstRow = row;
-
-                ++splineRowCount;
-                if (splineRowCount < SplineGridView.Rows.Count)
-                    SQLOutputTextBox.AppendText($"(@PATH, {row.Cells[0].Value}, {row.Cells[1].Value}, {row.Cells[2].Value}, {row.Cells[3].Value}, {row.Cells[4].Value}),\r\n");
-                else
-                    SQLOutputTextBox.AppendText($"(@PATH, {row.Cells[0].Value}, {row.Cells[1].Value}, {row.Cells[2].Value}, {row.Cells[3].Value}, {row.Cells[4].Value});\r\n");
-            }
-
-            SQLOutputTextBox.AppendText("\r\n");
-
             // creature
             if (firstRow != null)
             {
