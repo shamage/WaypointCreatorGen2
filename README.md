@@ -1,3 +1,4 @@
+#This code is still in the state of change - modification - correction !
 # WaypointCreatorGen3
 
 The reboot of the WaypointCreator tool with code that has been rewritten from scratch to provide a faster and cleaner workflow while also removing features that are no longer of use
